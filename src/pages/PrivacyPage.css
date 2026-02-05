@@ -1,0 +1,12 @@
+.privacy-content {
+  --background: #f7f8fb;
+}
+
+.privacy-content h2 {
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.privacy-content p {
+  color: var(--ion-color-medium);
+}

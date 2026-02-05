@@ -1,0 +1,76 @@
+.home-content {
+  --background: linear-gradient(180deg, #f4f8ff 0%, #ffffff 55%, #f7f6ff 100%);
+}
+
+.home-hero {
+  margin: 4px 0 16px;
+}
+
+.home-hero h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.home-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  color: var(--ion-color-medium);
+  font-weight: 600;
+}
+
+.home-card {
+  border-radius: 20px;
+  box-shadow: 0 10px 22px rgba(21, 36, 80, 0.08);
+}
+
+.home-card-primary {
+  background: linear-gradient(120deg, #e5f0ff 0%, #fff7ef 100%);
+}
+
+.home-card-compact ion-card-content {
+  display: grid;
+  grid-template-columns: 40px 1fr auto;
+  align-items: center;
+  gap: 12px;
+}
+
+.home-card ion-icon {
+  font-size: 1.6rem;
+  color: var(--ion-color-primary);
+}
+
+.home-card h2,
+.home-card h3 {
+  margin: 4px 0 4px;
+  font-weight: 700;
+}
+
+.home-card p {
+  margin: 0 0 8px;
+  color: var(--ion-color-medium);
+}
+
+.home-card-badges ion-card-content {
+  display: grid;
+  gap: 10px;
+}
+
+.home-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.home-card-head {
+  display: grid;
+  grid-template-columns: 36px 1fr;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.home-grid {
+  margin-top: 6px;
+}

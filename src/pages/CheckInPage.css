@@ -1,0 +1,246 @@
+.checkin-content {
+  --background: radial-gradient(120% 120% at 10% 0%, #e9f3ff 0%, #fefcff 45%, #f7f8ff 100%);
+  --padding-bottom: 160px;
+  position: relative;
+}
+
+.checkin-content::before,
+.checkin-content::after {
+  content: '';
+  position: absolute;
+  border-radius: 999px;
+  filter: blur(0);
+  opacity: 0.25;
+  z-index: 0;
+}
+
+.checkin-content::before {
+  width: 220px;
+  height: 220px;
+  background: #b7d6ff;
+  top: -90px;
+  right: -80px;
+}
+
+.checkin-content::after {
+  width: 180px;
+  height: 180px;
+  background: #ffe2b7;
+  bottom: 20px;
+  left: -70px;
+}
+
+.welcome-section {
+  margin-top: 8px;
+  margin-bottom: 18px;
+  text-align: left;
+  position: relative;
+  z-index: 1;
+}
+
+.welcome-section h1 {
+  font-weight: 700;
+  font-size: 2.3rem;
+  margin-bottom: 6px;
+  letter-spacing: -0.5px;
+}
+
+.checkin-subtitle {
+  margin: 0 0 8px;
+  color: var(--ion-color-medium);
+  font-weight: 600;
+}
+
+.checkin-prompt {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--ion-color-dark);
+  margin-bottom: 4px;
+}
+
+.checkin-hint {
+  font-size: 0.9rem;
+  color: var(--ion-color-medium);
+}
+
+.checkin-goal {
+  font-size: 0.9rem;
+  margin-top: 6px;
+  color: var(--ion-color-primary);
+  font-weight: 600;
+}
+
+.mood-card {
+  --background: rgba(255, 255, 255, 0.9);
+  --color: var(--ion-color-dark);
+  --padding-start: 0;
+  --padding-end: 0;
+  --padding-top: 0;
+  --padding-bottom: 0;
+  --ripple-color: var(--ion-color-primary);
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 22px;
+  padding: 22px 10px;
+  margin: 10px;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid rgba(18, 25, 38, 0.06);
+  height: 100%;
+  min-height: 132px;
+  text-transform: none;
+  box-shadow: 0 10px 24px rgba(31, 39, 58, 0.08);
+  animation: cardEnter 0.45s ease both;
+  overflow: visible;
+}
+
+.mood-card::part(native) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mood-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.mood-card.active {
+  background: white;
+  border: 1px solid var(--ion-color-primary);
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 14px 30px rgba(38, 60, 120, 0.2);
+}
+
+.mood-icon {
+  font-size: 3.1rem;
+  margin-bottom: 10px;
+}
+
+.mood-label {
+  font-size: 0.95rem;
+  text-align: center;
+  white-space: normal;
+  line-height: 1.2;
+  width: 100%;
+}
+
+.mood-label strong {
+  display: block;
+}
+
+.mood-grid ion-col:nth-child(1) .mood-card {
+  animation-delay: 40ms;
+}
+
+.mood-grid ion-col:nth-child(2) .mood-card {
+  animation-delay: 90ms;
+}
+
+.mood-grid ion-col:nth-child(3) .mood-card {
+  animation-delay: 140ms;
+}
+
+.mood-grid ion-col:nth-child(4) .mood-card {
+  animation-delay: 190ms;
+}
+
+.mood-grid ion-col:nth-child(5) .mood-card {
+  animation-delay: 240ms;
+}
+
+.suggestion-card {
+  border-radius: 18px;
+  background: #ffffff;
+  box-shadow: 0 12px 22px rgba(29, 46, 92, 0.1);
+  margin-top: 10px;
+}
+
+.suggestion-card h3 {
+  margin: 0 0 6px;
+  font-weight: 700;
+}
+
+.suggestion-card p {
+  margin: 0;
+  color: var(--ion-color-medium);
+}
+
+.note-card {
+  border-radius: 18px;
+  background: linear-gradient(135deg, #f8faff 0%, #ffffff 100%);
+  box-shadow: 0 8px 20px rgba(29, 46, 92, 0.08);
+  margin-top: 16px;
+  border: 1px solid rgba(56, 128, 255, 0.15);
+  position: relative;
+  z-index: 1;
+}
+
+.note-textarea {
+  --background: #ffffff;
+  --padding-start: 12px;
+  --padding-end: 12px;
+  --padding-top: 10px;
+  --padding-bottom: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  font-size: 0.95rem;
+  min-height: 80px;
+}
+
+/* Animación de brillo para llamar la atención */
+.note-card.highlight-pulse {
+  animation: highlightPulse 0.6s ease-in-out 2;
+}
+
+@keyframes highlightPulse {
+  0% {
+    box-shadow: 0 8px 20px rgba(29, 46, 92, 0.08);
+    border-color: rgba(56, 128, 255, 0.15);
+  }
+
+  50% {
+    box-shadow: 0 0 25px rgba(56, 128, 255, 0.5), 0 8px 20px rgba(29, 46, 92, 0.15);
+    border-color: rgba(56, 128, 255, 0.6);
+  }
+
+  100% {
+    box-shadow: 0 8px 20px rgba(29, 46, 92, 0.08);
+    border-color: rgba(56, 128, 255, 0.15);
+  }
+}
+
+.submit-button {
+  --height: 60px;
+  --box-shadow: 0 12px 24px rgba(56, 128, 255, 0.3);
+  font-weight: 700;
+  font-size: 1.05rem;
+  margin-bottom: 10px;
+}
+
+.footer-note {
+  text-align: center;
+  opacity: 0.7;
+}
+
+.checkin-footer-section {
+  margin-top: 24px;
+  padding: 16px;
+  padding-bottom: 80px;
+}
+
+@keyframes cardEnter {
+  from {
+    transform: translateY(8px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}

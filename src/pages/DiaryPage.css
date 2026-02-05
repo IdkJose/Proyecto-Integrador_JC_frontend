@@ -1,0 +1,214 @@
+.diary-content {
+  --background: #f7f9fc;
+}
+
+/* Intro */
+.diary-intro {
+  text-align: center;
+  padding: 16px 0 20px;
+}
+
+.diary-intro h2 {
+  margin: 0 0 6px;
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.diary-intro p {
+  margin: 0;
+  color: var(--ion-color-medium);
+  font-size: 0.95rem;
+}
+
+/* Filtro personalizado */
+.filter-buttons {
+  display: flex;
+  background: #e8eef5;
+  border-radius: 12px;
+  padding: 4px;
+  margin-bottom: 12px;
+}
+
+.filter-btn {
+  flex: 1;
+  padding: 10px 16px;
+  border: none;
+  background: transparent;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--ion-color-medium);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.filter-btn.active {
+  background: white;
+  color: var(--ion-color-primary);
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Contador */
+.entries-count {
+  text-align: right;
+  padding: 0 4px 8px;
+  font-size: 0.85rem;
+  color: var(--ion-color-medium);
+}
+
+/* Lista */
+.diary-list {
+  background: transparent;
+  padding: 0;
+}
+
+/* Wrapper de entrada */
+.diary-entry-wrapper {
+  margin-bottom: 10px;
+}
+
+/* Card de entrada clickeable */
+.diary-entry-card {
+  background: white;
+  border-radius: 14px;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.diary-entry-card.expanded {
+  border-radius: 14px 14px 0 0;
+  background: linear-gradient(135deg, #4c8dff 0%, #6ea8ff 100%);
+  color: white;
+}
+
+.diary-entry-card.expanded .entry-info h3,
+.diary-entry-card.expanded .entry-info p {
+  color: white;
+}
+
+.diary-entry-card:active {
+  transform: scale(0.98);
+}
+
+.entry-emoji {
+  font-size: 1.8rem;
+  flex-shrink: 0;
+}
+
+.entry-info {
+  flex: 1;
+}
+
+.entry-info h3 {
+  margin: 0 0 3px;
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--ion-color-dark);
+}
+
+.entry-info p {
+  margin: 0;
+  color: var(--ion-color-medium);
+  font-size: 0.85rem;
+  text-transform: capitalize;
+}
+
+.note-indicator {
+  font-size: 1.2rem;
+}
+
+.expand-icon {
+  font-size: 0.8rem;
+  color: var(--ion-color-medium);
+}
+
+.diary-entry-card.expanded .expand-icon {
+  color: white;
+}
+
+/* Panel de detalle expandido */
+.entry-detail-panel {
+  background: white;
+  border-radius: 0 0 14px 14px;
+  padding: 16px;
+  border-top: 1px solid #e8eef5;
+  animation: slideDown 0.2s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.detail-date-full {
+  font-size: 0.9rem;
+  color: var(--ion-color-medium);
+  text-transform: capitalize;
+  margin-bottom: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px dashed #e8eef5;
+}
+
+.detail-note-box {
+  background: linear-gradient(135deg, #e8f0ff 0%, #f0f5ff 100%);
+  border-radius: 12px;
+  padding: 14px;
+  border-left: 4px solid var(--ion-color-primary);
+}
+
+.detail-note-box h4 {
+  margin: 0 0 8px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--ion-color-primary);
+}
+
+.detail-note-box p {
+  margin: 0;
+  line-height: 1.6;
+  color: var(--ion-color-dark);
+  font-size: 0.95rem;
+}
+
+.detail-no-note {
+  text-align: center;
+  color: var(--ion-color-medium);
+  font-style: italic;
+  padding: 10px 0;
+  font-size: 0.9rem;
+}
+
+/* Empty state */
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--ion-color-medium);
+}
+
+.empty-emoji {
+  font-size: 3rem;
+  display: block;
+  margin-bottom: 12px;
+}
+
+.empty-state p {
+  margin: 0 0 4px;
+  font-size: 1rem;
+}
+
+.empty-state small {
+  font-size: 0.85rem;
+}

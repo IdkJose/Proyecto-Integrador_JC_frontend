@@ -1,0 +1,221 @@
+.report-content {
+    --background: linear-gradient(180deg, #e8f0ff 0%, #f7f9fc 100%);
+}
+
+/* Hero */
+.report-hero {
+    text-align: center;
+    padding: 20px 16px 30px;
+}
+
+.hero-icon {
+    font-size: 3rem;
+    color: var(--ion-color-primary);
+    margin-bottom: 12px;
+}
+
+.report-hero h1 {
+    margin: 0 0 8px;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--ion-color-dark);
+}
+
+.report-hero p {
+    margin: 0;
+    color: var(--ion-color-medium);
+}
+
+/* Cards */
+.report-card {
+    border-radius: 20px;
+    margin-bottom: 16px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+}
+
+.report-card h2 {
+    margin: 0 0 16px;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+/* Gráfico */
+.chart-card {
+    background: linear-gradient(135deg, #4c8dff 0%, #6ea8ff 100%);
+}
+
+.chart-card h2 {
+    color: white;
+}
+
+.report-chart {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    height: 140px;
+    gap: 8px;
+}
+
+.report-bar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    gap: 6px;
+}
+
+.bar-wrapper {
+    width: 100%;
+    height: 100px;
+    display: flex;
+    align-items: flex-end;
+    position: relative;
+    overflow: visible;
+}
+
+.bar-fill {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 8px 8px 4px 4px;
+    min-height: 10px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    position: relative;
+    overflow: visible;
+    transition: height 0.3s ease;
+}
+
+.bar-value {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--ion-color-primary);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translate(-50%, -4px);
+    white-space: nowrap;
+}
+
+.bar-label {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.9);
+    text-transform: capitalize;
+}
+
+/* Stats row */
+.stats-row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.stat-card {
+    flex: 1;
+    border-radius: 16px;
+    margin: 0;
+    text-align: center;
+}
+
+.stat-card ion-icon {
+    font-size: 1.8rem;
+    margin-bottom: 8px;
+}
+
+.stat-card.positive {
+    background: linear-gradient(135deg, #2dd36f 0%, #5dd98e 100%);
+    color: white;
+}
+
+.stat-card.total {
+    background: white;
+}
+
+.stat-card.total ion-icon {
+    color: var(--ion-color-primary);
+}
+
+.stat-value {
+    font-size: 1.8rem;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.stat-label {
+    font-size: 0.8rem;
+    opacity: 0.9;
+    margin-top: 4px;
+}
+
+/* Desglose */
+.mood-breakdown {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.breakdown-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.breakdown-emoji {
+    font-size: 1.3rem;
+    width: 28px;
+    text-align: center;
+}
+
+.breakdown-label {
+    width: 60px;
+    font-size: 0.85rem;
+    color: var(--ion-color-dark);
+}
+
+.breakdown-bar-bg {
+    flex: 1;
+    height: 10px;
+    background: #e8eef5;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.breakdown-bar {
+    height: 100%;
+    border-radius: 5px;
+    transition: width 0.3s ease;
+}
+
+.breakdown-great {
+    background: #ffc409;
+}
+
+.breakdown-good {
+    background: #2dd36f;
+}
+
+.breakdown-okay {
+    background: #92949c;
+}
+
+.breakdown-bad {
+    background: #5260ff;
+}
+
+.breakdown-awful {
+    background: #eb445a;
+}
+
+.breakdown-count {
+    width: 24px;
+    text-align: right;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+/* Botón compartir */
+.share-button {
+    margin-top: 8px;
+    --border-radius: 14px;
+    --box-shadow: 0 4px 12px rgba(56, 128, 255, 0.3);
+}
