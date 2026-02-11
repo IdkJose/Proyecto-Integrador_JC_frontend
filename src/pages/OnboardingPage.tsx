@@ -21,15 +21,15 @@ import './OnboardingPage.css';
 const OnboardingPage: React.FC = () => {
   const history = useHistory();
   const prefs = loadUserPrefs();
-  const [displayName, setDisplayName] = useState(prefs.displayName || '');
+  const [displayName, setDisplayName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [goal, setGoal] = useState<UserGoal | undefined>(prefs.goal || undefined);
-  const [reminderTime, setReminderTime] = useState(prefs.reminderTime || '20:00');
+  const [goal, setGoal] = useState<UserGoal | undefined>(undefined);
+  const [reminderTime, setReminderTime] = useState('20:00');
 
   const canContinue =
     displayName.trim().length > 0 &&
-    email.trim().length > 0 &&
+    email.trim().endsWith('@puce.edu.ec') &&
     password.trim().length > 0 &&
     Boolean(goal);
 
@@ -78,7 +78,12 @@ const OnboardingPage: React.FC = () => {
 
           <IonItem lines="inset" className="onboarding-item">
             <IonLabel position="stacked">Email</IonLabel>
-            <IonInput type="email" value={email} onIonChange={(e) => setEmail(e.detail.value || '')} />
+            <IonInput type="email" value={email} placeholder="ejemplo@puce.edu.ec" onIonChange={(e) => setEmail(e.detail.value || '')} />
+            {email.length > 0 && !email.endsWith('@puce.edu.ec') && (
+              <IonText color="danger">
+                <p style={{ fontSize: '12px', marginTop: '5px' }}>Debe ser correo institucional (@puce.edu.ec)</p>
+              </IonText>
+            )}
           </IonItem>
 
           <IonItem lines="inset" className="onboarding-item">

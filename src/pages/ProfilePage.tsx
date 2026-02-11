@@ -33,8 +33,9 @@ const EditProfileModalBody: React.FC<{
   initialGoal: string;
   initialReminder: string;
   onDismiss: () => void;
-  onSave: (name: string, goal: string, reminder: string) => void;
-}> = ({ initialName, email, initialGoal, initialReminder, onDismiss, onSave }) => {
+  onSave: (name: string, goal: string, reminder: string) => Promise<void>;
+  saving: boolean;
+}> = ({ initialName, email, initialGoal, initialReminder, onDismiss, onSave, saving }) => {
   const [name, setName] = useState(initialName);
   const [goal, setGoal] = useState(initialGoal);
   const [reminder, setReminder] = useState(initialReminder);
@@ -45,7 +46,7 @@ const EditProfileModalBody: React.FC<{
         <IonToolbar>
           <IonTitle>Editar Datos</IonTitle>
           <IonButtons slot="end">
-            <IonButton onClick={onDismiss}>Cerrar</IonButton>
+            <IonButton onClick={onDismiss} disabled={saving}>Cerrar</IonButton>
           </IonButtons>
         </IonToolbar>
       </IonHeader>
@@ -53,7 +54,7 @@ const EditProfileModalBody: React.FC<{
         <IonList>
           <IonItem className="profile-edit-item" lines="inset">
             <IonLabel position="stacked">Nombre</IonLabel>
-            <IonInput value={name} onIonChange={e => setName(e.detail.value!)} />
+            <IonInput value={name} onIonInput={e => setName(e.detail.value!)} disabled={saving} />
           </IonItem>
 
           <IonItem className="profile-edit-item" lines="inset">
@@ -63,7 +64,7 @@ const EditProfileModalBody: React.FC<{
 
           <IonItem className="profile-edit-item" lines="inset">
             <IonLabel position="stacked">Objetivo Principal</IonLabel>
-            <IonSelect value={goal} onIonChange={e => setGoal(e.detail.value)} interface="popover">
+            <IonSelect value={goal} onIonChange={e => setGoal(e.detail.value)} interface="popover" disabled={saving}>
               {Object.entries(goalLabels).map(([key, label]) => (
                 <IonSelectOption key={key} value={key}>{label}</IonSelectOption>
               ))}
@@ -72,7 +73,7 @@ const EditProfileModalBody: React.FC<{
 
           <IonItem className="profile-edit-item" lines="inset">
             <IonLabel position="stacked">Hora de Recordatorio</IonLabel>
-            <IonSelect value={reminder} onIonChange={e => setReminder(e.detail.value)} interface="popover">
+            <IonSelect value={reminder} onIonChange={e => setReminder(e.detail.value)} interface="popover" disabled={saving}>
               <IonSelectOption value="08:00">08:00</IonSelectOption>
               <IonSelectOption value="13:00">13:00</IonSelectOption>
               <IonSelectOption value="20:00">20:00</IonSelectOption>
@@ -81,8 +82,8 @@ const EditProfileModalBody: React.FC<{
         </IonList>
 
         <div className="ion-padding" style={{ marginTop: '20px' }}>
-          <IonButton expand="block" onClick={() => onSave(name, goal, reminder)}>
-            Guardar Cambios
+          <IonButton expand="block" onClick={() => onSave(name, goal, reminder)} disabled={saving}>
+            {saving ? 'Guardando...' : 'Guardar Cambios'}
           </IonButton>
         </div>
       </IonContent>
@@ -98,6 +99,7 @@ const ProfilePage: React.FC = () => {
   const [prefs, setPrefs] = useState(loadUserPrefs());
   const [notifications, setNotifications] = useState(prefs.notificationsEnabled);
   const [darkMode, setDarkMode] = useState(loadTheme());
+  const [isSaving, setIsSaving] = useState(false); // Estado de carga
 
   // Lógica de Guardado
   const handleSave = async (newName: string, newGoal: string, newReminder: string) => {
@@ -110,6 +112,7 @@ const ProfilePage: React.FC = () => {
       return;
     }
 
+    setIsSaving(true); // Activar carga
     try {
       await AuthService.updateUser(prefs.id, newName);
       const newPrefs = updateUserPrefs({
@@ -120,9 +123,12 @@ const ProfilePage: React.FC = () => {
       setPrefs(newPrefs);
       dismiss(); // Cerrar modal
       presentToast({ message: 'Perfil actualizado.', color: 'success', duration: 2000 });
-    } catch (error) {
+    } catch (error: any) {
       console.error("Update failed", error);
-      presentToast({ message: 'Error al actualizar.', color: 'danger', duration: 2000 });
+      const msg = error.response?.data?.message || error.message || 'Error desconocido al actualizar.';
+      presentToast({ message: `Error: ${msg}`, color: 'danger', duration: 4000 });
+    } finally {
+      setIsSaving(false); // Desactivar carga
     }
   };
 
@@ -133,7 +139,8 @@ const ProfilePage: React.FC = () => {
     initialGoal: prefs.goal || '',
     initialReminder: prefs.reminderTime || '20:00',
     onDismiss: () => dismiss(),
-    onSave: handleSave
+    onSave: handleSave,
+    saving: isSaving
   });
 
   return (
