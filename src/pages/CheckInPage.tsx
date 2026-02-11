@@ -26,6 +26,7 @@ import {
 } from 'ionicons/icons';
 import { addMoodEntry, MoodId } from '../utils/moodStore';
 import { goalLabels, loadUserPrefs } from '../utils/userPrefs';
+import { MoodService } from '../services/MoodService';
 import { useHistory } from 'react-router-dom';
 import './CheckInPage.css';
 
@@ -86,24 +87,34 @@ const CheckInPage: React.FC = () => {
   const displayName = prefs.displayName ? `Hola, ${prefs.displayName}` : 'Hola';
   const goalLabel = prefs.goal ? goalLabels[prefs.goal] : null;
 
-  const handleRegister = () => {
+  const handleRegister = async () => {
     if (!selectedMood) {
       return;
     }
 
     const noteValue = note.trim();
-    console.log('Saving entry with note:', noteValue);
+    const entryLabel = selectedMeta?.label || 'Sin nombre';
 
+    // 1. Guardar en localStorage (respaldo local inmediato)
     const entry = {
       id: `${Date.now()}`,
       moodId: selectedMood,
-      label: selectedMeta?.label || 'Sin nombre',
+      label: entryLabel,
       createdAt: new Date().toISOString(),
       note: noteValue || undefined
     };
-
-    console.log('Full entry:', entry);
     addMoodEntry(entry);
+
+    // 2. Guardar en Base de Datos (sincronización con backend)
+    if (prefs.id) {
+      try {
+        await MoodService.create(prefs.id, selectedMood, entryLabel, noteValue || undefined);
+        console.log('✅ Check-in guardado en BD');
+      } catch (error) {
+        console.error('⚠️ No se pudo guardar en BD, se mantiene en local:', error);
+      }
+    }
+
     setToastOpen(true);
     setTimeout(() => {
       const target = selectedMood === 'bad' || selectedMood === 'awful'

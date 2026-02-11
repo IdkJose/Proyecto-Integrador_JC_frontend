@@ -14,6 +14,8 @@ import {
 } from '@ionic/react';
 import { shareOutline, trendingUpOutline, happyOutline, sadOutline } from 'ionicons/icons';
 import { getMoodTotals, getWeeklySummary, MoodId } from '../utils/moodStore';
+import { loadUserPrefs } from '../utils/userPrefs';
+import { MoodService, MoodEntryResponse } from '../services/MoodService';
 import './ReportPage.css';
 
 const moodLabels: Record<MoodId, string> = {
@@ -32,6 +34,31 @@ const moodEmojis: Record<MoodId, string> = {
     awful: '⛈️'
 };
 
+// Función para calcular totales desde datos del backend
+const computeTotals = (entries: MoodEntryResponse[]): Record<MoodId, number> => {
+    const t: Record<MoodId, number> = { great: 0, good: 0, okay: 0, bad: 0, awful: 0 };
+    entries.forEach(e => { if (t[e.moodId as MoodId] !== undefined) t[e.moodId as MoodId] += 1; });
+    return t;
+};
+
+// Función para calcular resumen semanal desde datos del backend
+const computeWeekly = (entries: MoodEntryResponse[]): { label: string; count: number }[] => {
+    const today = new Date();
+    const summary: { label: string; count: number }[] = [];
+    for (let i = 6; i >= 0; i--) {
+        const day = new Date(today);
+        day.setDate(today.getDate() - i);
+        const dayStart = new Date(day.getFullYear(), day.getMonth(), day.getDate()).getTime();
+        const dayEnd = dayStart + 24 * 60 * 60 * 1000;
+        const count = entries.filter(e => {
+            const t = new Date(e.createdAt).getTime();
+            return t >= dayStart && t < dayEnd;
+        }).length;
+        summary.push({ label: day.toLocaleDateString('es-EC', { weekday: 'short' }), count });
+    }
+    return summary;
+};
+
 const ReportPage: React.FC = () => {
     const [weekly, setWeekly] = useState<{ label: string; count: number }[]>([]);
     const [totals, setTotals] = useState<Record<MoodId, number>>({
@@ -43,8 +70,26 @@ const ReportPage: React.FC = () => {
     });
 
     useIonViewWillEnter(() => {
-        setWeekly(getWeeklySummary());
-        setTotals(getMoodTotals());
+        const prefs = loadUserPrefs();
+        if (prefs.id) {
+            MoodService.getByUser(prefs.id)
+                .then((backendEntries) => {
+                    if (backendEntries.length > 0) {
+                        setTotals(computeTotals(backendEntries));
+                        setWeekly(computeWeekly(backendEntries));
+                    } else {
+                        setWeekly(getWeeklySummary());
+                        setTotals(getMoodTotals());
+                    }
+                })
+                .catch(() => {
+                    setWeekly(getWeeklySummary());
+                    setTotals(getMoodTotals());
+                });
+        } else {
+            setWeekly(getWeeklySummary());
+            setTotals(getMoodTotals());
+        }
     });
 
     const maxCount = Math.max(...weekly.map(d => d.count), 1);

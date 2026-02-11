@@ -9,6 +9,8 @@ import {
   useIonViewWillEnter
 } from '@ionic/react';
 import { getRecentEntries, MoodEntry, MoodId } from '../utils/moodStore';
+import { loadUserPrefs } from '../utils/userPrefs';
+import { MoodService } from '../services/MoodService';
 import './DiaryPage.css';
 
 const moodLabels: Record<MoodId, string> = {
@@ -33,8 +35,27 @@ const DiaryPage: React.FC = () => {
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
   useIonViewWillEnter(() => {
-    const entries = getRecentEntries(50);
-    setRecentEntries(entries);
+    const prefs = loadUserPrefs();
+    if (prefs.id) {
+      // Intentar cargar desde el backend (BD)
+      MoodService.getByUser(prefs.id)
+        .then((backendEntries) => {
+          const mapped: MoodEntry[] = backendEntries.map(e => ({
+            id: String(e.id),
+            moodId: e.moodId as MoodId,
+            label: e.label,
+            note: e.note || undefined,
+            createdAt: e.createdAt
+          }));
+          setRecentEntries(mapped.length > 0 ? mapped : getRecentEntries(50));
+        })
+        .catch(() => {
+          // Si falla la conexión, usar datos locales
+          setRecentEntries(getRecentEntries(50));
+        });
+    } else {
+      setRecentEntries(getRecentEntries(50));
+    }
   });
 
   // Toggle expandir/colapsar

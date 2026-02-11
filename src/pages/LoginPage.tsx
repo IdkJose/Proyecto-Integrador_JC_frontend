@@ -34,10 +34,14 @@ const LoginPage: React.FC = () => {
     try {
       const user = await AuthService.login(email, password);
 
+      // Sincronizar preferencias del backend al localStorage del dispositivo
       updateUserPrefs({
-        id: user.id, // Guardamos ID
+        id: user.id,
         displayName: user.displayName,
         email: user.email,
+        goal: user.goal as any,
+        reminderTime: user.reminderTime || '20:00',
+        notificationsEnabled: user.notificationsEnabled,
         onboardingCompleted: true
       });
 

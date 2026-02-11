@@ -39,7 +39,10 @@ const OnboardingPage: React.FC = () => {
       // 1. Registro en Backend (PostgreSQL)
       const user = await AuthService.register(email, password, displayName);
 
-      // 2. Guardar en Storage Local (Preferencias de usuario)
+      // 2. Guardar preferencias en Backend (goal, reminderTime, notificaciones)
+      await AuthService.updateUser(user.id, displayName.trim(), goal as UserGoal, reminderTime, true);
+
+      // 3. Guardar en Storage Local (Preferencias de usuario)
       updateUserPrefs({
         id: user.id, // Guardamos ID generado por BD
         displayName: displayName.trim(),
@@ -49,11 +52,11 @@ const OnboardingPage: React.FC = () => {
         onboardingCompleted: true
       });
 
-      // 3. Programar notificaciones iniciales
+      // 4. Programar notificaciones iniciales
       NotificationService.scheduleDaily(reminderTime, goal as UserGoal);
       NotificationService.schedulePeriodic(goal as UserGoal);
 
-      // 4. Navegar a la Home
+      // 5. Navegar a la Home
       history.replace('/tabs/home');
 
     } catch (error) {

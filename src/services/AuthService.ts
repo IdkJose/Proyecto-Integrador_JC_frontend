@@ -4,6 +4,9 @@ export interface LoginResponse {
     id: number;
     email: string;
     displayName: string;
+    goal: string | null;
+    reminderTime: string | null;
+    notificationsEnabled: boolean;
 }
 
 export const AuthService = {
@@ -12,8 +15,9 @@ export const AuthService = {
         return response.data;
     },
 
-    updateUser: async (id: number, displayName: string): Promise<LoginResponse> => {
-        const response = await api.put<LoginResponse>(`/auth/update/${id}`, { displayName });
+    // Ahora enviamos todas las preferencias al backend
+    updateUser: async (id: number, displayName: string, goal?: string | null, reminderTime?: string, notificationsEnabled?: boolean): Promise<LoginResponse> => {
+        const response = await api.put<LoginResponse>(`/auth/update/${id}`, { displayName, goal, reminderTime, notificationsEnabled });
         return response.data;
     },
 

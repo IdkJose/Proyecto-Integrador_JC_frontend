@@ -121,8 +121,8 @@ const ProfilePage: React.FC = () => {
 
     setIsSaving(true); // Mostrar estado de carga
     try {
-      // 1. Actualizar en Backend (Base de Datos)
-      await AuthService.updateUser(prefs.id, newName);
+      // 1. Actualizar en Backend (Base de Datos) - ahora enviamos preferencias también
+      await AuthService.updateUser(prefs.id, newName, newGoal, newReminder, notifications);
 
       // 2. Actualizar Preferencias Locales (Celular)
       const newPrefs = updateUserPrefs({
