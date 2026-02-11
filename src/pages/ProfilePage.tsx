@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   IonButton,
   IonContent,
@@ -13,23 +13,128 @@ import {
   IonTitle,
   IonToggle,
   IonToolbar,
-  IonIcon
+  IonIcon,
+  IonInput,
+  useIonToast,
+  useIonModal,
+  IonButtons
 } from '@ionic/react';
 import { useHistory } from 'react-router-dom';
 import { goalLabels, loadUserPrefs, updateUserPrefs, UserGoal } from '../utils/userPrefs';
 import { loadTheme, saveTheme, applyTheme } from '../utils/themeStore';
-import { moonOutline } from 'ionicons/icons';
+import { moonOutline, saveOutline, arrowForwardOutline } from 'ionicons/icons';
+import { AuthService } from '../services/AuthService';
 import './ProfilePage.css';
+
+// Componente del cuerpo del Modal
+const EditProfileModalBody: React.FC<{
+  initialName: string;
+  email: string;
+  initialGoal: string;
+  initialReminder: string;
+  onDismiss: () => void;
+  onSave: (name: string, goal: string, reminder: string) => void;
+}> = ({ initialName, email, initialGoal, initialReminder, onDismiss, onSave }) => {
+  const [name, setName] = useState(initialName);
+  const [goal, setGoal] = useState(initialGoal);
+  const [reminder, setReminder] = useState(initialReminder);
+
+  return (
+    <IonPage>
+      <IonHeader>
+        <IonToolbar>
+          <IonTitle>Editar Datos</IonTitle>
+          <IonButtons slot="end">
+            <IonButton onClick={onDismiss}>Cerrar</IonButton>
+          </IonButtons>
+        </IonToolbar>
+      </IonHeader>
+      <IonContent className="ion-padding">
+        <IonList>
+          <IonItem className="profile-edit-item" lines="inset">
+            <IonLabel position="stacked">Nombre</IonLabel>
+            <IonInput value={name} onIonChange={e => setName(e.detail.value!)} />
+          </IonItem>
+
+          <IonItem className="profile-edit-item" lines="inset">
+            <IonLabel position="stacked">Correo (No editable)</IonLabel>
+            <IonInput value={email} disabled />
+          </IonItem>
+
+          <IonItem className="profile-edit-item" lines="inset">
+            <IonLabel position="stacked">Objetivo Principal</IonLabel>
+            <IonSelect value={goal} onIonChange={e => setGoal(e.detail.value)} interface="popover">
+              {Object.entries(goalLabels).map(([key, label]) => (
+                <IonSelectOption key={key} value={key}>{label}</IonSelectOption>
+              ))}
+            </IonSelect>
+          </IonItem>
+
+          <IonItem className="profile-edit-item" lines="inset">
+            <IonLabel position="stacked">Hora de Recordatorio</IonLabel>
+            <IonSelect value={reminder} onIonChange={e => setReminder(e.detail.value)} interface="popover">
+              <IonSelectOption value="08:00">08:00</IonSelectOption>
+              <IonSelectOption value="13:00">13:00</IonSelectOption>
+              <IonSelectOption value="20:00">20:00</IonSelectOption>
+            </IonSelect>
+          </IonItem>
+        </IonList>
+
+        <div className="ion-padding" style={{ marginTop: '20px' }}>
+          <IonButton expand="block" onClick={() => onSave(name, goal, reminder)}>
+            Guardar Cambios
+          </IonButton>
+        </div>
+      </IonContent>
+    </IonPage>
+  );
+};
 
 const ProfilePage: React.FC = () => {
   const history = useHistory();
-  const prefs = loadUserPrefs();
+  const [presentToast] = useIonToast();
+
+  // Estado local
+  const [prefs, setPrefs] = useState(loadUserPrefs());
   const [notifications, setNotifications] = useState(prefs.notificationsEnabled);
-  const [goal, setGoal] = useState<UserGoal | ''>(prefs.goal || '');
-  const [reminderTime, setReminderTime] = useState(prefs.reminderTime || '20:00');
   const [darkMode, setDarkMode] = useState(loadTheme());
 
-  const displayName = prefs.displayName || 'Estudiante PUCE';
+  // Lógica de Guardado
+  const handleSave = async (newName: string, newGoal: string, newReminder: string) => {
+    if (!prefs.id) {
+      presentToast({ message: 'Error: ID no encontrado. Re-logueate.', color: 'danger', duration: 3000 });
+      return;
+    }
+    if (!newName.trim()) {
+      presentToast({ message: 'El nombre es requerido.', color: 'warning', duration: 2000 });
+      return;
+    }
+
+    try {
+      await AuthService.updateUser(prefs.id, newName);
+      const newPrefs = updateUserPrefs({
+        displayName: newName,
+        goal: newGoal as UserGoal,
+        reminderTime: newReminder
+      });
+      setPrefs(newPrefs);
+      dismiss(); // Cerrar modal
+      presentToast({ message: 'Perfil actualizado.', color: 'success', duration: 2000 });
+    } catch (error) {
+      console.error("Update failed", error);
+      presentToast({ message: 'Error al actualizar.', color: 'danger', duration: 2000 });
+    }
+  };
+
+  // Configuración del hook useIonModal
+  const [present, dismiss] = useIonModal(EditProfileModalBody, {
+    initialName: prefs.displayName,
+    email: prefs.email,
+    initialGoal: prefs.goal || '',
+    initialReminder: prefs.reminderTime || '20:00',
+    onDismiss: () => dismiss(),
+    onSave: handleSave
+  });
 
   return (
     <IonPage>
@@ -40,15 +145,16 @@ const ProfilePage: React.FC = () => {
       </IonHeader>
 
       <IonContent className="ion-padding profile-content">
+
         <div className="profile-hero">
           <IonText color="primary">
-            <h2>{displayName}</h2>
+            <h2>{prefs.displayName || 'Usuario'}</h2>
           </IonText>
-          <p>correo@puce.edu.ec</p>
+          <p>{prefs.email || 'Sin correo registrado'}</p>
         </div>
 
         <IonList inset>
-          <IonItem>
+          <IonItem lines="full">
             <IonIcon icon={moonOutline} slot="start" />
             <IonLabel>Modo oscuro</IonLabel>
             <IonToggle
@@ -61,8 +167,9 @@ const ProfilePage: React.FC = () => {
               }}
             />
           </IonItem>
-          <IonItem>
-            <IonLabel>Notificaciones personalizadas</IonLabel>
+
+          <IonItem lines="full">
+            <IonLabel>Notificaciones</IonLabel>
             <IonToggle
               checked={notifications}
               onIonChange={(event) => {
@@ -71,49 +178,28 @@ const ProfilePage: React.FC = () => {
               }}
             />
           </IonItem>
-          <IonItem lines="inset">
-            <IonLabel>Objetivo principal</IonLabel>
-            <IonSelect
-              value={goal}
-              interface="popover"
-              onIonChange={(event) => {
-                setGoal(event.detail.value);
-                updateUserPrefs({ goal: event.detail.value });
-              }}
-            >
-              {Object.entries(goalLabels).map(([key, label]) => (
-                <IonSelectOption key={key} value={key}>
-                  {label}
-                </IonSelectOption>
-              ))}
-            </IonSelect>
-          </IonItem>
-          <IonItem lines="inset">
+
+          <IonItem lines="full">
             <IonLabel>Hora de recordatorio</IonLabel>
-            <IonSelect
-              value={reminderTime}
-              interface="popover"
-              onIonChange={(event) => {
-                setReminderTime(event.detail.value);
-                updateUserPrefs({ reminderTime: event.detail.value });
-              }}
-            >
-              <IonSelectOption value="08:00">08:00</IonSelectOption>
-              <IonSelectOption value="13:00">13:00</IonSelectOption>
-              <IonSelectOption value="20:00">20:00</IonSelectOption>
-            </IonSelect>
+            <IonText slot="end">{prefs.reminderTime || '20:00'}</IonText>
           </IonItem>
-          <IonItem lines="none">
+
+          {/* Botón que activa el modal via hook */}
+          <IonItem button onClick={() => present()} lines="full" detail={true}>
+            <IonLabel>Editar Datos Personales</IonLabel>
+          </IonItem>
+
+          <IonItem button onClick={() => history.push('/privacy')} lines="none" detail={true}>
             <IonLabel>Privacidad</IonLabel>
-            <IonButton fill="clear" size="small" onClick={() => history.push('/privacy')}>
-              Ver detalles
-            </IonButton>
           </IonItem>
         </IonList>
 
-        <IonButton expand="block" shape="round" fill="outline" onClick={() => history.replace('/login')}>
-          Cerrar sesion
-        </IonButton>
+        <div className="ion-padding">
+          <IonButton expand="block" color="medium" fill="outline" onClick={() => history.replace('/login')}>
+            Cerrar sesión
+          </IonButton>
+        </div>
+
       </IonContent>
     </IonPage>
   );

@@ -18,3 +18,10 @@
 ion-select {
   max-width: 180px;
 }
+
+/* Copied exactly from .onboarding-item to match user preference */
+.profile-edit-item {
+  --border-radius: 16px;
+  --background: #ffffff;
+  margin-bottom: 16px;
+}

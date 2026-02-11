@@ -212,6 +212,31 @@ body.dark .home-content {
   --background: #1a1a2e;
 }
 
+/* Onboarding page en modo oscuro */
+body.dark .onboarding-content {
+  --background: #1a1a2e;
+}
+
+body.dark .onboarding-item {
+  --background: #2d2d4a !important;
+  --color: #ffffff;
+  --border-color: #373754;
+}
+
+body.dark .onboarding-item ion-label {
+  color: #c3c3e0 !important;
+}
+
+body.dark .onboarding-item ion-input {
+  --background: transparent !important;
+  --color: #ffffff !important;
+}
+
+body.dark .onboarding-item ion-select {
+  --placeholder-color: #8787a4;
+  color: #ffffff;
+}
+
 /* Login page en modo oscuro */
 body.dark .login-content {
   --background: #1a1a2e;
@@ -219,7 +244,8 @@ body.dark .login-content {
 
 body.dark ion-input,
 body.dark ion-textarea {
-  --background: #2d2d4a !important;
+  --background: rgba(45, 45, 74, 0.5) !important;
+  /* Más translúcido */
   --color: #ffffff !important;
   --placeholder-color: #8787a4 !important;
   color: #ffffff !important;
@@ -227,7 +253,8 @@ body.dark ion-textarea {
 
 body.dark ion-input .native-input,
 body.dark ion-textarea .native-input {
-  background: #2d2d4a !important;
+  background: transparent !important;
+  /* Evitar doble fondo */
   color: #ffffff !important;
 }
 

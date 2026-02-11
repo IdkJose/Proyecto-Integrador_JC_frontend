@@ -1,7 +1,9 @@
 export type UserGoal = 'estres' | 'concentracion' | 'animo' | 'suenio';
 
 export interface UserPrefs {
+  id?: number; // Nuevo campo para ID
   displayName: string;
+  email: string;
   goal: UserGoal | null;
   notificationsEnabled: boolean;
   reminderTime: string;
@@ -12,6 +14,7 @@ const STORAGE_KEY = 'menteactiva_prefs';
 
 const defaultPrefs: UserPrefs = {
   displayName: '',
+  email: '', // Valor por defecto
   goal: null,
   notificationsEnabled: true,
   reminderTime: '20:00',

@@ -20,4 +20,5 @@
 .onboarding-item {
   --border-radius: 16px;
   --background: #ffffff;
+  margin-bottom: 16px;
 }

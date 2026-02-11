@@ -11,39 +11,74 @@ import {
   IonText,
   IonTitle,
   IonToolbar,
-  IonToast
+  IonSpinner,
+  useIonToast
 } from '@ionic/react';
 import { lockClosedOutline, mailOutline } from 'ionicons/icons';
 import { useHistory } from 'react-router-dom';
-import { loadUserPrefs, updateUserPrefs } from '../utils/userPrefs';
+import { updateUserPrefs } from '../utils/userPrefs';
+import { AuthService } from '../services/AuthService';
 import './LoginPage.css';
 
 const LoginPage: React.FC = () => {
   const history = useHistory();
+  const [present] = useIonToast();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [toastOpen, setToastOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const normalizedEmail = email.trim().toLowerCase();
-  const isInstitutional = normalizedEmail.endsWith('@puce.edu.ec');
+  const handleLogin = async () => {
+    if (!email || !password) return;
 
-  const getNextPath = () => {
-    const prefs = loadUserPrefs();
-    return prefs.onboardingCompleted ? '/tabs/home' : '/onboarding';
+    setLoading(true);
+    try {
+      const user = await AuthService.login(email, password);
+
+      updateUserPrefs({
+        id: user.id, // Guardamos ID
+        displayName: user.displayName,
+        email: user.email,
+        onboardingCompleted: true
+      });
+
+      present({
+        message: `Bienvenido, ${user.displayName}`,
+        duration: 2000,
+        position: 'top',
+        color: 'success'
+      });
+
+      setTimeout(() => {
+        history.push('/tabs/home');
+      }, 500);
+
+    } catch (error: any) {
+      console.error("Login incorrecto", error);
+
+      let msg = "Error de conexión";
+
+      if (error.response) {
+        if (error.response.data && error.response.data.message) {
+          msg = error.response.data.message;
+        } else if (error.response.status === 401 || error.response.status === 403) {
+          msg = "Credenciales incorrectas o usuario no registrado.";
+        } else {
+          msg = `Error del servidor (${error.response.status})`;
+        }
+      } else if (error.message) {
+        msg = error.message;
+      }
+
+      present({
+        message: msg,
+        duration: 3000,
+        position: 'top',
+        color: 'danger'
+      });
+    } finally {
+      setLoading(false);
+    }
   };
-
-  const handleLogin = () => {
-    updateUserPrefs({ displayName: normalizedEmail.split('@')[0] });
-    setToastOpen(true);
-    setTimeout(() => {
-      history.push(getNextPath());
-    }, 400);
-  };
-
-  const canSubmit =
-    normalizedEmail.length > 0 &&
-    password.trim().length > 0 &&
-    isInstitutional;
 
   return (
     <IonPage>
@@ -70,14 +105,8 @@ const LoginPage: React.FC = () => {
               placeholder="tu@correo.com"
               value={email}
               onIonChange={(e) => setEmail(e.detail.value || '')}
-              autocomplete="email"
             />
           </IonItem>
-            {!isInstitutional && normalizedEmail.length > 0 && (
-              <IonText color="danger">
-                <small>Solo se admite correo institucional @puce.edu.ec</small>
-              </IonText>
-            )}
 
           <IonItem lines="inset" className="login-item">
             <IonIcon icon={lockClosedOutline} slot="start" className="login-icon" />
@@ -87,42 +116,38 @@ const LoginPage: React.FC = () => {
               placeholder="********"
               value={password}
               onIonChange={(e) => setPassword(e.detail.value || '')}
-              autocomplete="current-password"
             />
           </IonItem>
 
-          <IonButton
-            expand="block"
-            shape="round"
-            className="login-button"
-            disabled={!canSubmit}
-            onClick={handleLogin}
-          >
-            Iniciar sesion
-          </IonButton>
+          <div style={{ marginTop: '20px' }}>
+            {loading ? (
+              <div className="ion-text-center"><IonSpinner /></div>
+            ) : (
+              <IonButton
+                expand="block"
+                shape="round"
+                className="login-button"
+                onClick={handleLogin}
+              >
+                Iniciar Sesión
+              </IonButton>
+            )}
+          </div>
 
           <div className="login-helper">
             <IonText color="medium">
-              <small>Sin cuenta? Puedes continuar con una demo.</small>
+              <small>¿No tienes cuenta?</small>
             </IonText>
             <IonButton
               fill="clear"
               size="small"
               className="login-link"
-              onClick={() => history.push(getNextPath())}
+              onClick={() => history.push('/onboarding')}
             >
-              Entrar como invitado
+              Crear Cuenta Nueva
             </IonButton>
           </div>
         </div>
-
-        <IonToast
-          isOpen={toastOpen}
-          onDidDismiss={() => setToastOpen(false)}
-          message="Bienvenido a MenteActiva"
-          duration={1200}
-          position="top"
-        />
       </IonContent>
     </IonPage>
   );
