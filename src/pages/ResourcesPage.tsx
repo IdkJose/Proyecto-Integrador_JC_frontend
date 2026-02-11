@@ -12,7 +12,7 @@ import {
   IonTitle,
   IonToolbar
 } from '@ionic/react';
-import { headsetOutline, leafOutline, pulseOutline, timerOutline, heartOutline, sparklesOutline, moonOutline, sunnyOutline } from 'ionicons/icons';
+import { headsetOutline, leafOutline, pulseOutline, timerOutline, heartOutline, sparklesOutline, moonOutline, sunnyOutline, extensionPuzzleOutline } from 'ionicons/icons';
 import './ResourcesPage.css';
 
 const ResourcesPage: React.FC = () => {
@@ -177,6 +177,23 @@ const ResourcesPage: React.FC = () => {
               </div>
             </div>
             <IonButton expand="block" className="routine-btn morning" onClick={() => navigateToResource('energia-matutina')}>Activar energía</IonButton>
+          </IonCardContent>
+        </IonCard>
+
+        <IonText className="resource-section">
+          <h2>Actividades del Curso</h2>
+        </IonText>
+
+        <IonCard className="resource-card" style={{ background: 'var(--ion-color-secondary-tint)', marginBottom: '24px' }}>
+          <IonCardContent>
+            <IonIcon icon={extensionPuzzleOutline} style={{ fontSize: '2rem', color: 'var(--ion-color-secondary)' }} />
+            <IonText>
+              <h3>Práctica Interactiva</h3>
+              <p>Responde preguntas sobre las actividades y refuerza tu aprendizaje.</p>
+            </IonText>
+            <IonButton expand="block" fill="solid" color="secondary" onClick={() => history.push('/tabs/activities')}>
+              Ver Actividades
+            </IonButton>
           </IonCardContent>
         </IonCard>
 

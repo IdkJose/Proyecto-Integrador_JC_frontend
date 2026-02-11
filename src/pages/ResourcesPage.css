@@ -221,6 +221,7 @@
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -244,64 +245,7 @@
 }
 
 /* ===== MODO OSCURO ===== */
-@media (prefers-color-scheme: dark) {
-  .resources-content {
-    --background: #1a1a2e;
-  }
 
-  .routine-card {
-    --background: #2d2d44;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-  }
-
-  .routine-title {
-    color: #ffffff;
-  }
-
-  .routine-description {
-    color: #b8b8c8;
-  }
-
-  .routine-info {
-    color: #a0a0b0;
-  }
-
-  .routine-steps,
-  .routine-benefits {
-    background: #3a3a52;
-  }
-
-  .steps-title,
-  .benefits-title {
-    color: #d0d0e0;
-  }
-
-  .steps-list li {
-    color: #b8b8c8;
-  }
-
-  .steps-list strong {
-    color: #ffffff;
-  }
-
-  .benefit-tag {
-    background: #4a4a62;
-    color: #e0e0f0;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-  }
-
-  .resource-card {
-    --background: #2d2d44;
-  }
-
-  .resource-card h3 {
-    color: #ffffff;
-  }
-
-  .resource-card p {
-    color: #b8b8c8;
-  }
-}
 
 /* También soportar la clase .dark de Ionic */
 body.dark .resources-content,

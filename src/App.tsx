@@ -18,6 +18,8 @@ import OnboardingPage from './pages/OnboardingPage';
 import PrivacyPage from './pages/PrivacyPage';
 import ReportPage from './pages/ReportPage';
 import ResourceDetailPage from './pages/ResourceDetailPage';
+import ActivitiesPage from './pages/ActivitiesPage';
+import ActivityQuestionsPage from './pages/ActivityQuestionsPage';
 import CustomTabBar from './components/CustomTabBar';
 
 /* Core CSS required for Ionic components to work properly */
@@ -76,6 +78,12 @@ const AppContent: React.FC = () => {
         </Route>
         <Route exact path="/tabs/profile">
           <ProfilePage />
+        </Route>
+        <Route exact path="/tabs/activities">
+          <ActivitiesPage />
+        </Route>
+        <Route exact path="/tabs/activities/:id/questions">
+          <ActivityQuestionsPage />
         </Route>
         <Route exact path="/tabs/report">
           <ReportPage />
