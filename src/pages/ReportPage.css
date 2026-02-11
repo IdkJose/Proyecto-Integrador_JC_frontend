@@ -21,6 +21,10 @@
     color: var(--ion-color-dark);
 }
 
+body.dark .report-hero h1 {
+    color: #ffffff;
+}
+
 .report-hero p {
     margin: 0;
     color: var(--ion-color-medium);

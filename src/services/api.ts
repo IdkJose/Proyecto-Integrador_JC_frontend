@@ -7,10 +7,10 @@ const api = axios.create({
     // ---------------------------------------------------------------------------
 
     // Emulador de Android 
-    baseURL: 'http://10.0.2.2:8080/api/v1',
+    // baseURL: 'http://10.0.2.2:8080/api/v1',
 
     // IONIC 
-    // baseURL: 'http://localhost:8080/api/v1',
+    baseURL: 'http://localhost:8080/api/v1',
 
     timeout: 30000,
     headers: {
