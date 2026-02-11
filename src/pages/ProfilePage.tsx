@@ -22,8 +22,9 @@ import {
 import { useHistory } from 'react-router-dom';
 import { goalLabels, loadUserPrefs, updateUserPrefs, UserGoal } from '../utils/userPrefs';
 import { loadTheme, saveTheme, applyTheme } from '../utils/themeStore';
-import { moonOutline, saveOutline, arrowForwardOutline } from 'ionicons/icons';
+import { moonOutline, saveOutline, arrowForwardOutline, notificationsOutline } from 'ionicons/icons';
 import { AuthService } from '../services/AuthService';
+import { NotificationService } from '../services/NotificationService'; // Import Service
 import './ProfilePage.css';
 
 // Componente del cuerpo del Modal
@@ -73,11 +74,12 @@ const EditProfileModalBody: React.FC<{
 
           <IonItem className="profile-edit-item" lines="inset">
             <IonLabel position="stacked">Hora de Recordatorio</IonLabel>
-            <IonSelect value={reminder} onIonChange={e => setReminder(e.detail.value)} interface="popover" disabled={saving}>
-              <IonSelectOption value="08:00">08:00</IonSelectOption>
-              <IonSelectOption value="13:00">13:00</IonSelectOption>
-              <IonSelectOption value="20:00">20:00</IonSelectOption>
-            </IonSelect>
+            <IonInput
+              type="time"
+              value={reminder}
+              onIonChange={e => setReminder(e.detail.value!)}
+              disabled={saving}
+            />
           </IonItem>
         </IonList>
 
@@ -101,7 +103,12 @@ const ProfilePage: React.FC = () => {
   const [darkMode, setDarkMode] = useState(loadTheme());
   const [isSaving, setIsSaving] = useState(false); // Estado de carga
 
-  // Lógica de Guardado
+  // Solicitar permisos al cargar
+  useEffect(() => {
+    NotificationService.requestPermissions();
+  }, []);
+
+  // Lógica de Guardado: Actualiza backend y preferencias locales
   const handleSave = async (newName: string, newGoal: string, newReminder: string) => {
     if (!prefs.id) {
       presentToast({ message: 'Error: ID no encontrado. Re-logueate.', color: 'danger', duration: 3000 });
@@ -112,23 +119,34 @@ const ProfilePage: React.FC = () => {
       return;
     }
 
-    setIsSaving(true); // Activar carga
+    setIsSaving(true); // Mostrar estado de carga
     try {
+      // 1. Actualizar en Backend (Base de Datos)
       await AuthService.updateUser(prefs.id, newName);
+
+      // 2. Actualizar Preferencias Locales (Celular)
       const newPrefs = updateUserPrefs({
         displayName: newName,
         goal: newGoal as UserGoal,
         reminderTime: newReminder
       });
       setPrefs(newPrefs);
+
+      // 3. Re-programar notificación si están activadas
+      if (notifications) {
+        // Pasamos el objetivo para personalizar el mensaje
+        NotificationService.scheduleDaily(newReminder, newGoal as UserGoal);
+        NotificationService.schedulePeriodic(newGoal as UserGoal); // Programar también el recordatorio periódico
+      }
+
       dismiss(); // Cerrar modal
-      presentToast({ message: 'Perfil actualizado.', color: 'success', duration: 2000 });
+      presentToast({ message: 'Perfil actualizado y recordatorio programado.', color: 'success', duration: 2000 });
     } catch (error: any) {
       console.error("Update failed", error);
       const msg = error.response?.data?.message || error.message || 'Error desconocido al actualizar.';
       presentToast({ message: `Error: ${msg}`, color: 'danger', duration: 4000 });
     } finally {
-      setIsSaving(false); // Desactivar carga
+      setIsSaving(false); // Ocultar carga
     }
   };
 
@@ -176,12 +194,20 @@ const ProfilePage: React.FC = () => {
           </IonItem>
 
           <IonItem lines="full">
+            <IonIcon icon={notificationsOutline} slot="start" />
             <IonLabel>Notificaciones</IonLabel>
             <IonToggle
               checked={notifications}
               onIonChange={(event) => {
-                setNotifications(event.detail.checked);
-                updateUserPrefs({ notificationsEnabled: event.detail.checked });
+                const isEnabled = event.detail.checked;
+                setNotifications(isEnabled);
+                updateUserPrefs({ notificationsEnabled: isEnabled });
+                if (isEnabled) {
+                  NotificationService.scheduleDaily(prefs.reminderTime || '20:00', prefs.goal);
+                  NotificationService.schedulePeriodic(prefs.goal);
+                } else {
+                  // Cancelar todas si se desactivan (opcional, por ahora solo no programamos nuevas)
+                }
               }}
             />
           </IonItem>
@@ -194,6 +220,10 @@ const ProfilePage: React.FC = () => {
           {/* Botón que activa el modal via hook */}
           <IonItem button onClick={() => present()} lines="full" detail={true}>
             <IonLabel>Editar Datos Personales</IonLabel>
+          </IonItem>
+
+          <IonItem button onClick={() => NotificationService.testNotification()} lines="full" detail={true}>
+            <IonLabel>Probar Notificación</IonLabel>
           </IonItem>
 
           <IonItem button onClick={() => history.push('/privacy')} lines="none" detail={true}>

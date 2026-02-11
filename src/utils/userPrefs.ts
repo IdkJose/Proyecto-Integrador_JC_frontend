@@ -10,6 +10,7 @@ export interface UserPrefs {
   onboardingCompleted: boolean;
 }
 
+// Clave bajo la cual se guardan los datos en el navegador del celular
 const STORAGE_KEY = 'menteactiva_prefs';
 
 const defaultPrefs: UserPrefs = {
@@ -21,6 +22,7 @@ const defaultPrefs: UserPrefs = {
   onboardingCompleted: false
 };
 
+// Intenta leer y parsear el JSON. Si falla, devuelve los valores por defecto.
 const safeParse = (value: string | null): UserPrefs => {
   if (!value) {
     return { ...defaultPrefs };
@@ -34,14 +36,17 @@ const safeParse = (value: string | null): UserPrefs => {
   }
 };
 
+// Cargar preferencias desde localStorage
 export const loadUserPrefs = (): UserPrefs => {
   return safeParse(localStorage.getItem(STORAGE_KEY));
 };
 
+// Guardar preferencias en localStorage (persistencia)
 export const saveUserPrefs = (prefs: UserPrefs): void => {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(prefs));
 };
 
+// Actualizar parcialmente las preferencias (ej: solo cambiar el nombre)
 export const updateUserPrefs = (updates: Partial<UserPrefs>): UserPrefs => {
   const current = loadUserPrefs();
   const next = { ...current, ...updates };

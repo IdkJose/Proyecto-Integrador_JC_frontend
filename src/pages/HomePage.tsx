@@ -28,9 +28,12 @@ import './HomePage.css';
 
 const HomePage: React.FC = () => {
   const history = useHistory();
+  // Carga preferencias del usuario (nombre, objetivo, etc.) desde localStorage
   const prefs = loadUserPrefs();
+  // Obtiene la racha actual y las insignias desbloqueadas
   const streak = getCurrentStreak();
   const badges = getBadges();
+  // Traduce el código del objetivo (ej: 'estres') a un texto legible
   const goalLabel = prefs.goal ? goalLabels[prefs.goal] : 'Sin objetivo';
 
   return (

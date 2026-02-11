@@ -16,6 +16,7 @@ import {
 import { useHistory } from 'react-router-dom';
 import { goalLabels, loadUserPrefs, updateUserPrefs, UserGoal } from '../utils/userPrefs';
 import { AuthService } from '../services/AuthService';
+import { NotificationService } from '../services/NotificationService';
 import './OnboardingPage.css';
 
 const OnboardingPage: React.FC = () => {
@@ -35,12 +36,12 @@ const OnboardingPage: React.FC = () => {
 
   const handleContinue = async () => {
     try {
-      // Registro real en el backend
+      // 1. Registro en Backend (PostgreSQL)
       const user = await AuthService.register(email, password, displayName);
 
-      // Guardar preferencias locales
+      // 2. Guardar en Storage Local (Preferencias de usuario)
       updateUserPrefs({
-        id: user.id, // Guardamos ID
+        id: user.id, // Guardamos ID generado por BD
         displayName: displayName.trim(),
         email: email.trim(),
         goal: goal as UserGoal,
@@ -48,6 +49,11 @@ const OnboardingPage: React.FC = () => {
         onboardingCompleted: true
       });
 
+      // 3. Programar notificaciones iniciales
+      NotificationService.scheduleDaily(reminderTime, goal as UserGoal);
+      NotificationService.schedulePeriodic(goal as UserGoal);
+
+      // 4. Navegar a la Home
       history.replace('/tabs/home');
 
     } catch (error) {
