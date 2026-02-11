@@ -36,3 +36,331 @@
   margin: 0;
   color: var(--ion-color-medium);
 }
+
+/* ===== RUTINAS RECOMENDADAS - NUEVO DISEÑO ===== */
+
+.routine-card {
+  border-radius: 20px;
+  margin: 16px 0;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.routine-card:active {
+  transform: scale(0.98);
+}
+
+.routine-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 20px 20px 0;
+}
+
+.routine-icon-wrapper {
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+}
+
+.routine-icon-wrapper.breathing {
+  background: linear-gradient(135deg, #e8f4fd 0%, #d0e8f9 100%);
+  color: #2196F3;
+}
+
+.routine-icon-wrapper.mindfulness {
+  background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+  color: #4CAF50;
+}
+
+.routine-icon-wrapper.sleep {
+  background: linear-gradient(135deg, #ede7f6 0%, #d1c4e9 100%);
+  color: #673AB7;
+}
+
+.routine-icon-wrapper.morning {
+  background: linear-gradient(135deg, #fff8e1 0%, #ffecb3 100%);
+  color: #FF9800;
+}
+
+.routine-badge {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.routine-badge.new {
+  background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+}
+
+.routine-card ion-card-content {
+  display: block;
+  padding: 16px 20px 20px;
+}
+
+.routine-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin: 0 0 8px;
+}
+
+.routine-description {
+  font-size: 0.95rem;
+  color: #666;
+  line-height: 1.5;
+  margin: 0 0 16px;
+}
+
+.routine-details {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.routine-info {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+  color: #888;
+}
+
+.routine-info ion-icon {
+  font-size: 1rem;
+  color: var(--ion-color-primary);
+}
+
+.routine-steps,
+.routine-benefits {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-bottom: 16px;
+}
+
+.steps-title,
+.benefits-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #555;
+  margin: 0 0 10px;
+}
+
+.steps-list {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.steps-list li {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 6px;
+  line-height: 1.4;
+}
+
+.steps-list li:last-child {
+  margin-bottom: 0;
+}
+
+.steps-list strong {
+  color: #333;
+}
+
+.benefits-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.benefit-tag {
+  background: white;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  color: #555;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.routine-btn {
+  --border-radius: 12px;
+  font-weight: 600;
+  margin-top: 4px;
+  --background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+.routine-btn.mindfulness {
+  --background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+  --box-shadow: 0 4px 15px rgba(17, 153, 142, 0.4);
+}
+
+.routine-btn.sleep {
+  --background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --box-shadow: 0 4px 15px rgba(103, 58, 183, 0.4);
+}
+
+.routine-btn.morning {
+  --background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  --box-shadow: 0 4px 15px rgba(245, 87, 108, 0.4);
+}
+
+/* Animaciones sutiles */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.routine-card {
+  animation: fadeInUp 0.5s ease forwards;
+}
+
+.routine-card:nth-child(2) {
+  animation-delay: 0.1s;
+}
+
+.routine-card:nth-child(3) {
+  animation-delay: 0.2s;
+}
+
+.routine-card:nth-child(4) {
+  animation-delay: 0.3s;
+}
+
+/* ===== MODO OSCURO ===== */
+@media (prefers-color-scheme: dark) {
+  .resources-content {
+    --background: #1a1a2e;
+  }
+
+  .routine-card {
+    --background: #2d2d44;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  }
+
+  .routine-title {
+    color: #ffffff;
+  }
+
+  .routine-description {
+    color: #b8b8c8;
+  }
+
+  .routine-info {
+    color: #a0a0b0;
+  }
+
+  .routine-steps,
+  .routine-benefits {
+    background: #3a3a52;
+  }
+
+  .steps-title,
+  .benefits-title {
+    color: #d0d0e0;
+  }
+
+  .steps-list li {
+    color: #b8b8c8;
+  }
+
+  .steps-list strong {
+    color: #ffffff;
+  }
+
+  .benefit-tag {
+    background: #4a4a62;
+    color: #e0e0f0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  .resource-card {
+    --background: #2d2d44;
+  }
+
+  .resource-card h3 {
+    color: #ffffff;
+  }
+
+  .resource-card p {
+    color: #b8b8c8;
+  }
+}
+
+/* También soportar la clase .dark de Ionic */
+body.dark .resources-content,
+.ios body.dark .resources-content,
+.md body.dark .resources-content {
+  --background: #1a1a2e;
+}
+
+body.dark .routine-card,
+.ios body.dark .routine-card,
+.md body.dark .routine-card {
+  --background: #2d2d44;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+body.dark .routine-title {
+  color: #ffffff;
+}
+
+body.dark .routine-description {
+  color: #b8b8c8;
+}
+
+body.dark .routine-info {
+  color: #a0a0b0;
+}
+
+body.dark .routine-steps,
+body.dark .routine-benefits {
+  background: #3a3a52;
+}
+
+body.dark .steps-title,
+body.dark .benefits-title {
+  color: #d0d0e0;
+}
+
+body.dark .steps-list li {
+  color: #b8b8c8;
+}
+
+body.dark .steps-list strong {
+  color: #ffffff;
+}
+
+body.dark .benefit-tag {
+  background: #4a4a62;
+  color: #e0e0f0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+body.dark .resource-card {
+  --background: #2d2d44;
+}
+
+body.dark .resource-card h3 {
+  color: #ffffff;
+}
+
+body.dark .resource-card p {
+  color: #b8b8c8;
+}

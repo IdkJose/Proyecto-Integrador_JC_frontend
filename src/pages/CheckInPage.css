@@ -244,3 +244,76 @@
     opacity: 1;
   }
 }
+
+/* ===== MODO OSCURO ===== */
+body.dark .checkin-content {
+  --background: linear-gradient(180deg, #1a1a2e 0%, #16213e 55%, #1a1a2e 100%);
+}
+
+body.dark .checkin-content::before {
+  background: #3a4a7a;
+  opacity: 0.15;
+}
+
+body.dark .checkin-content::after {
+  background: #5a4a3a;
+  opacity: 0.15;
+}
+
+body.dark .checkin-prompt {
+  color: #ffffff;
+}
+
+body.dark .checkin-hint {
+  color: #b8b8c8;
+}
+
+body.dark .checkin-subtitle {
+  color: #a0a0b0;
+}
+
+body.dark .mood-card {
+  --background: #2d2d44;
+  background: #2d2d44;
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.3);
+}
+
+body.dark .mood-card.active {
+  background: #3a3a52;
+  border-color: var(--ion-color-primary);
+}
+
+body.dark .mood-label {
+  color: #ffffff;
+}
+
+body.dark .mood-icon {
+  color: #f5e6d3;
+}
+
+body.dark .suggestion-card {
+  --background: #2d2d44;
+  background: #2d2d44;
+  box-shadow: 0 12px 22px rgba(0, 0, 0, 0.3);
+}
+
+body.dark .suggestion-card h3 {
+  color: #ffffff;
+}
+
+body.dark .suggestion-card p {
+  color: #b8b8c8;
+}
+
+body.dark .note-card {
+  background: linear-gradient(135deg, #2d2d44 0%, #3a3a52 100%);
+  border-color: rgba(56, 128, 255, 0.3);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+body.dark .note-textarea {
+  --background: #3a3a52;
+  --color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.15);
+}

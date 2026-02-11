@@ -74,3 +74,56 @@
 .home-grid {
   margin-top: 6px;
 }
+
+/* ===== MODO OSCURO ===== */
+body.dark .home-content {
+  --background: linear-gradient(180deg, #1a1a2e 0%, #16213e 55%, #1a1a2e 100%);
+}
+
+body.dark .home-card {
+  --background: #2d2d44;
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.3);
+}
+
+body.dark .home-card-primary {
+  background: linear-gradient(120deg, #2d3a5a 0%, #3d2d4a 100%);
+}
+
+body.dark .home-card h2,
+body.dark .home-card h3 {
+  color: #ffffff;
+}
+
+body.dark .home-card p {
+  color: #b8b8c8;
+}
+
+body.dark .home-card-primary ion-button {
+  --background: #ffffff;
+  --color: #1a1a2e;
+  --box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
+}
+
+body.dark .home-hero h1 {
+  color: var(--ion-color-primary);
+}
+
+body.dark .home-hero p {
+  color: #b8b8c8;
+}
+
+body.dark .home-meta {
+  color: #a0a0b0;
+}
+
+body.dark .home-badges ion-chip {
+  --background: #f5e6d3;
+  --color: #1a1a2e;
+  border: 1px solid #d4c5b2;
+}
+
+body.dark .home-card ion-button[fill="clear"] {
+  --color: #f5e6d3;
+  border: 1px solid #f5e6d3;
+  border-radius: 8px;
+}
