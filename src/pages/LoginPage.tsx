@@ -4,7 +4,6 @@ import {
   IonContent,
   IonHeader,
   IonIcon,
-  IonInput,
   IonItem,
   IonLabel,
   IonPage,
@@ -104,22 +103,24 @@ const LoginPage: React.FC = () => {
           <IonItem lines="inset" className="login-item">
             <IonIcon icon={mailOutline} slot="start" className="login-icon" />
             <IonLabel position="stacked">Correo</IonLabel>
-            <IonInput
+            <input
               type="email"
               placeholder="tu@correo.com"
               value={email}
-              onIonChange={(e) => setEmail(e.detail.value || '')}
+              onChange={(e) => setEmail(e.target.value)}
+              className="native-login-input"
             />
           </IonItem>
 
           <IonItem lines="inset" className="login-item">
             <IonIcon icon={lockClosedOutline} slot="start" className="login-icon" />
             <IonLabel position="stacked">Contrasena</IonLabel>
-            <IonInput
+            <input
               type="password"
               placeholder="********"
               value={password}
-              onIonChange={(e) => setPassword(e.detail.value || '')}
+              onChange={(e) => setPassword(e.target.value)}
+              className="native-login-input"
             />
           </IonItem>
 
@@ -158,3 +159,4 @@ const LoginPage: React.FC = () => {
 };
 
 export default LoginPage;
+

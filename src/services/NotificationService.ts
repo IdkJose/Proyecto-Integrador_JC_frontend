@@ -95,23 +95,6 @@ export const NotificationService = {
             // Cancelar notificación periódica anterior (ID 2)
             await LocalNotifications.cancel({ notifications: [{ id: 2 }] });
 
-            // Programar para dentro de 4 horas y que se repita
-            // Nota: Capacitor LocalNotifications 'every' suele ser 'year'|'month'|'two-weeks'|'week'|'day'|'hour'|'minute'|'second'.
-            // Para "cada 4 horas", lo ideal es programar varias o usar un intervalo si la plataforma lo soporta bien.
-            // Para simplificar y ser "aceptable" sin drenar batería, usaremos 'day' (diario) pero como un recordatorio secundario a otra hora (ej: medio día)
-            // O usaremos un truco: Programarlo para HOY + 4 horas.
-            // Pero el usuario pidió "cada cierto tiempo".
-            // Una opción segura es programar una notificación recurrente cada DIA a una hora fija adicional (ej: 10 AM) si el usuario no tiene la otra.
-            // Pero intentaremos un intervalo simple si es posible, o simplemente una notificación fija adicional.
-
-            // Decisión: Programar una notificación adicional fija a las 10:00 AM para asegurar recordatorio matutino, y otra a las 18:00 PM.
-            // Para cumplir "cada cierto tiempo", vamos a programar una notificación RECURRENTE cada 4 horas (si el plugin lo permite, sino cada hora).
-            // Capacitor basic supports: 'hour'. 4 hours is tricky without scheduling multiple IDs.
-            // Vamos a programar una notificación RECURRENTE cada HORA (quizás demasiado) O cada DÍA a las 12:00 PM como "Check-in de mediodía".
-            // El usuario pidió "cada un cierto tiempo aceptable". 
-            // Interpretación: Un recordatorio extra. Vamos a ponerlo diario a las 12:00 PM (ID 2) y 18:00 PM (ID 3).
-            // Si el usuario ya configuró su hora principal, estas actúan como refuerzo.
-
             // Implementación: Recordatorio de refuerzo a las 12:00 PM (Mediodía)
             const midday = new Date();
             midday.setHours(12, 0, 0, 0);
